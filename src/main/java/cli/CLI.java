@@ -14,7 +14,6 @@ public class CLI {
     private Path currentDirectory;
 
 
-
     public CLI() {
         this.currentDirectory = Paths.get(System.getProperty("user.dir"));
     }
@@ -24,10 +23,14 @@ public class CLI {
     }
 
     public void printWorkingDirectory() {
+        if (Parser.getRedirect()) {
+            redirecting(currentDirectory.toString(), Parser.getTokens()[2]);
+            return;
+        }
         System.out.println(this.currentDirectory);
     }
 
-   public void changeDirectory(String newDir) {
+    public void changeDirectory(String newDir) {
         Path path = currentDirectory.resolve(newDir).normalize();
         File file = path.toFile();
 
@@ -39,7 +42,6 @@ public class CLI {
             System.out.println("Directory does not exist");
         }
    }
-
 
     public void createDirectory(String path) {
         Path newDirectoryPath = this.currentDirectory.resolve(path);
@@ -92,13 +94,20 @@ public class CLI {
 
     public void readFile(String fileName) {
         try {
+            String output = "";
             File file = new File(fileName);
             Scanner reader = new Scanner(file);
             while (reader.hasNextLine()) {
-                String line = reader.nextLine();    //Check if redirecting using getRedirect
-                System.out.println(line);
+                String line = reader.nextLine();//Check if redirecting using getRedirect
+                output += line + "\n";
             }
             reader.close();
+            if (Parser.getRedirect()) {
+                redirecting(output, Parser.getTokens()[3]);
+                return;
+            }
+            System.out.println(output);
+
         }catch (FileNotFoundException e) {
             System.out.println("An error occurred");
             e.printStackTrace();
@@ -142,15 +151,53 @@ public class CLI {
         try {
             if (!file.exists()) {
                 file.createNewFile();
-                System.out.println("File created: " + filename);
+                //System.out.println("File created: " + filename);
             }
+
             FileWriter fileWriter = new FileWriter(filename, Parser.getAppend());
             fileWriter.write(s + System.lineSeparator());
             fileWriter.close();
-            System.out.println("Data written successfully");
+            //System.out.println("Data written successfully");
 
         }catch(IOException e){
             System.out.println("Error occurred");
         }
+    }
+
+    public void help() {
+        System.out.println("Available commands:");
+        System.out.println("1. pwd - Print the current working directory.");
+        System.out.println("   Usage: pwd");
+        System.out.println();
+        System.out.println("2. cd - Change the current directory.");
+        System.out.println("   Usage: cd <directory>");
+        System.out.println();
+        System.out.println("3. ls - List files and directories in the current directory.");
+        System.out.println("   Usage: ls");
+        System.out.println();
+        System.out.println("4. ls -a - List all files, including hidden files.");
+        System.out.println("   Usage: ls -a");
+        System.out.println();
+        System.out.println("5. ls -r - List files and directories in reverse order.");
+        System.out.println("   Usage: ls -r");
+        System.out.println();
+        System.out.println("6. mkdir - Create a new directory.");
+        System.out.println("   Usage: mkdir <directory_name>");
+        System.out.println();
+        System.out.println("7. rmdir - Remove an empty directory.");
+        System.out.println("   Usage: rmdir <directory_name>");
+        System.out.println();
+        System.out.println("8. touch - Create a new empty file or update the timestamp of an existing file.");
+        System.out.println("   Usage: touch <file_name>");
+        System.out.println();
+        System.out.println("9. mv - Move or rename a file or directory.");
+        System.out.println("   Usage: mv <source> <destination>");
+        System.out.println();
+        System.out.println("10. rm - Remove a file.");
+        System.out.println("    Usage: rm <file_name>");
+        System.out.println();
+        System.out.println("11. cat - Display the contents of a file.");
+        System.out.println("    Usage: cat <file_name>");
+        System.out.println();
     }
 }

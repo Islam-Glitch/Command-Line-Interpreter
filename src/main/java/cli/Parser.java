@@ -4,7 +4,7 @@ public class Parser {
     private static boolean append = false;
     private static boolean redirect = false;
     private static boolean pipe = false;
-    private String[] tokens;
+    private static String[] tokens;
 
 
     public static boolean getAppend(){
@@ -17,7 +17,7 @@ public class Parser {
         return pipe;
     }
 
-    public String[] getTokens() {
+    public static String[] getTokens() {
         return tokens;
     }
 

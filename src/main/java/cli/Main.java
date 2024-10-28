@@ -27,7 +27,6 @@ public class Main {
                 case "pwd":
                     cli.printWorkingDirectory();
                     break;
-
                 case "cd":
                     cli.changeDirectory(uArgs[1]);
                     break;
@@ -51,6 +50,12 @@ public class Main {
                     break;
                 case "exit":
                     System.exit(0);
+                    break;
+                case "help":
+                    cli.help();
+                    break;
+                default:
+                    System.out.println("Invalid command, Use 'help' command");
                     break;
             }
         }
