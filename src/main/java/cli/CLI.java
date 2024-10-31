@@ -1,6 +1,6 @@
 package cli;
 
-import java.util.Scanner;
+import java.util.*;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,6 +13,9 @@ public class CLI {
 
     private Path currentDirectory;
 
+    public Path getCurrentDirectory() {
+        return currentDirectory;
+    }
 
     public CLI() {
         this.currentDirectory = Paths.get(System.getProperty("user.dir"));
@@ -92,7 +95,7 @@ public class CLI {
         }
     }
 
-    public void readFile(String fileName) {
+    public void readFile(String fileName) {//cat
         try {
             String output = "";
             File file = new File(fileName);
@@ -125,18 +128,19 @@ public class CLI {
         }
 
         //moving
-        if (dest.isDirectory()) {
-            File newFile = new File(dest, src.getName());
-            if (src.renameTo(newFile)) {//source renamed to the new file(dir)
+        if (dest.isDirectory()) {//if the dest is a dir, move the file or the dir to this dest
+            File newDir = new File(dest, src.getName());
+            if (src.renameTo(newDir)) {//source moved to the dir
                 System.out.println("Moved: " + source + " -> " + destination );
             }
             else {
                 System.out.println("An error occurred");
             }
         }
+
         //renaming
-        else {
-            if (src.renameTo(dest)) {//source renamed to destination
+        else {//if the dest is not a dir,it's a new word, file or the dir will rename to dest
+            if (src.renameTo(dest)) {//source renamed to dest name
                 System.out.println("Renamed: " + source + " to " + destination);
             }
             else {
@@ -146,7 +150,7 @@ public class CLI {
 
     }
 
-    public void redirecting(String s, String filename){ //Don't know if filename is relative or absolute path
+    public void redirecting(String commandOutput, String filename){ //Don't know if filename is relative or absolute path
         File file = new File(filename);
         try {
             if (!file.exists()) {
@@ -155,13 +159,65 @@ public class CLI {
             }
 
             FileWriter fileWriter = new FileWriter(filename, Parser.getAppend());
-            fileWriter.write(s + System.lineSeparator());
+            fileWriter.write(commandOutput + System.lineSeparator());
             fileWriter.close();
             //System.out.println("Data written successfully");
 
         }catch(IOException e){
             System.out.println("Error occurred");
         }
+    }
+
+    public String getList(){
+        return Arrays.toString(Objects.requireNonNull(currentDirectory.toFile().list()));
+    }
+
+
+    public ArrayList<String> list( String[] option ){
+
+        ArrayList<String> Output = new ArrayList<String>();
+        try {
+            File[] files = currentDirectory.toFile().listFiles();
+
+            if (files != null) {
+
+                if((option.length > 1 && (Objects.equals(option[1], "-r") )) ) {
+
+                    Arrays.sort(files, Comparator.reverseOrder());
+
+                    for (File file : files) {
+                        if (!file.isHidden()) {
+                            Output.add(file.getName());
+                        }
+                    }
+                }
+                else if (option.length == 1){
+                    for (File file : files) {
+                        if (!file.isHidden()) {
+                            Output.add(file.getName());
+                        }
+                    }
+                }
+                else {
+                    for (File file : files) {
+                        Output.add(file.getName());
+                    }
+                }
+
+            }
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
+        if (Parser.getPipe()) {
+
+        }
+        return Output;
+    }
+
+    public void pipe(String source, String destination) {
+
     }
 
     public void help() {
@@ -200,4 +256,6 @@ public class CLI {
         System.out.println("    Usage: cat <file_name>");
         System.out.println();
     }
+
+
 }

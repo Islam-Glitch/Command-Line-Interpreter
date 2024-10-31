@@ -1,3 +1,12 @@
 fdsaadsfjaksjdfkla;sdjflsak;djf;adlskj
 /home/abdulmalik/IdeaProjects/OS/Command-Line-Interpreter
 /home/abdulmalik/IdeaProjects/OS/Command-Line-Interpreter
+/home/abdulmalik/IdeaProjects/OS/Command-Line-Interpreter
+fdsaadsfjaksjdfkla;sdjflsak;djf;adlskj
+/home/abdulmalik/IdeaProjects/OS/Command-Line-Interpreter
+/home/abdulmalik/IdeaProjects/OS/Command-Line-Interpreter
+
+[file.txt, Test, .idea, file44.txt, file333.txt, pom.xml, .git, cat, files1, src, target]
+[file.txt, Test, .idea, file44.txt, file333.txt, pom.xml, .git, cat, files1, src, target]
+[file.txt, Test, .idea, file44.txt, file333.txt, pom.xml, .git, cat, files1, src, target]
+[file.txt, Test, .idea, file44.txt, file333.txt, pom.xml, .git, cat, files1, src, target]

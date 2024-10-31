@@ -1,5 +1,6 @@
 package cli;
 
+import java.util.Arrays;
 import java.util.Scanner;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,6 +12,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         CLI cli = new CLI();
+
 
 
 
@@ -48,11 +50,22 @@ public class Main {
                 case "mv":
                     cli.moveFileOrDirectory(uArgs[1], uArgs[2]);
                     break;
-                case "exit":
-                    System.exit(0);
+                case "ls":
+                    if (Parser.getRedirect() && Parser.getPipe()) {
+                        cli.redirecting(cli.getList(), uArgs[4]);
+                    }
+                    else if(Parser.getRedirect()){
+                        cli.redirecting(cli.getList(), uArgs[2]);
+                    }
+                    else{
+                        System.out.println(cli.list(uArgs));
+                    }
                     break;
                 case "help":
                     cli.help();
+                    break;
+                case "exit":
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Invalid command, Use 'help' command");
